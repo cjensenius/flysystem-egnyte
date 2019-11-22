@@ -1,5 +1,5 @@
 {
-    "name": "yespbs/flysystem-egnyte",
+    "name": "cjensenius/flysystem-egnyte",
     "description": "Flysystem Adapter for the Egnyte V1 API",
     "type": "package",
     "require": {
