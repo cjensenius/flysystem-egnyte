@@ -229,6 +229,47 @@ class EgnyteAdapter extends AbstractAdapter
 
         return array_merge($folders, $files);
     }
+    
+    /**
+     * {@inheritdoc}
+     * 
+     * @todo check return
+     */
+    public function listContentsById($id, $recursive = false): array
+    {
+        $result = $this->client->listFolderById($id, $recursive);
+        $result = (array)$result->getBody();
+
+        if ( (int)$result['total_count'] == 0) {
+            return [];
+        }
+
+        if( isset($result['folders']) ){
+            $folders = array_map(function ($entry) {
+
+                $entry = (array)$entry;
+
+                $path = $this->removePathPrefix($entry['path']);
+                return $this->normalizeResponse($entry, $path);
+
+            }, $result['folders']);
+        }else{
+            $folders = [];
+        }    
+
+        if( isset($result['files']) ){
+            $files = array_map(function ($entry) {
+                $entry = (array)$entry;
+                $path = $this->removePathPrefix($entry['path']);
+                return $this->normalizeResponse($entry, $path);
+
+            }, $result['files']);
+        }else{
+            $files = [];
+        }    
+
+        return array_merge($folders, $files);
+    }
 
     /**
      * {@inheritdoc}
